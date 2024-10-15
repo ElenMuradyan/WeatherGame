@@ -1,0 +1,22 @@
+export  const capitals = [
+    "Tokyo",
+    "Washington, D.C.",
+    "London",
+    "Paris",
+    "Berlin",
+    "Canberra",
+    "Ottawa",
+    "Rome",
+    "Beijing",
+    "New Delhi",
+    "Moscow",
+    "Brasília",
+    "Mexico City",
+    "Seoul",
+    "Madrid",
+    "Bangkok",
+    "Nairobi",
+    "Buenos Aires",
+    "Santiago",
+    "Cairo"
+]; 
