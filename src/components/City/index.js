@@ -2,38 +2,51 @@ import { useState, useEffect } from "react";
 import { capitals } from "../../utilis/constants";
 import { API_KEY, API_URL } from "../../utilis/constants";
 
-const City = ({ index, getName, getCurrentTemperature }) => {
-    const [ temperature, setTemperature ] = useState(0);
-const [ RandomCapitals, setRandomCapitals] = useState({});
-    const implementCapitalList = () => {
-            let capitalValues={}
-            while(Object.keys(capitalValues).length<6){
-            let index=Math.floor(Math.random()*20);
-            if(!capitalValues[index]){
-            capitalValues[index]=capitals[index];
-            }
-        }
-        return Object.values(capitalValues);
+const City = ({ getCityName, getCurrentTemperature, index }) => {
+    const [ RandomCapitals, setRandomCapitals] = useState([]);
+    const [ Temperatures, setTemperatures ] = useState([]);
+
+    let temperatures=[];  
+    let cities=[];
+
+    const implementCapitalList = async () => {
+        let capitalValues=new Set();
+        while(capitalValues.size<5){
+        const index=Math.floor(Math.random()*20);
+        capitalValues.add(capitals[index]);
         };
     
+        let capArr=Array.from(capitalValues);
+        for(let i=0;i<capArr.length;i++){
+            let temp;
+            await fetchTemperature(capArr[i]).then(val=>{
+            temp=val
+        })
+        cities.push(capArr[i]);
+        temperatures.push(Math.round(temp));
+        };
+    };
+    
     useEffect(() => {
-        setRandomCapitals(implementCapitalList());
+        implementCapitalList();
+        setRandomCapitals(cities);
+        setTemperatures(temperatures);
     }, []);
 
     useEffect(()=>{
-        const fetchTemperature = async () => {
-        try{
-            const response = await fetch(`${API_URL}${RandomCapitals[index]}&appid=${API_KEY}&units=metric`);
-            const data = await response.json();
-            setTemperature(data.main.temp);
-        }catch(error) {
-            console.log(error);
-        }};
-    fetchTemperature();
-    getCurrentTemperature(temperature);
-    getName(RandomCapitals[index-1]);
+    getCurrentTemperature(Temperatures[index-1]);
+    getCityName(RandomCapitals[index-1]);
     },[index])
-    return(<p>{RandomCapitals[index]}</p>)
+
+    const fetchTemperature = async (city) => {
+        try {
+            const response = await fetch(`${API_URL}${city}&appid=${API_KEY}&units=metric`);
+            const data = await response.json();
+            return data.main.temp;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 };
 
 export default City;
