@@ -7,18 +7,29 @@ const { Title } = Typography;
 
 const Game = () => {
     const [ CurrentTemperature, setCurrentTemperature ] = useState(0);
-    const [ EnteredTemperature, SetEnteredTemperature ] = useState(0);
+    const [ EnteredTemperature, SetEnteredTemperature ] = useState();
     const [ Index, setIndex ] = useState(0);
     const [ CityName, setCityName] = useState('');
     const [ boxes, setBoxes ] = useState([]);
+    const [ coins, setCoins ] = useState(0);
     
     const HandleComparision = () => {
-    setIndex(Index+1);
+        if(EnteredTemperature!==''){
+            setIndex(Index+1);
+        }else{
+            notification.error({
+                message:'Please enter the temperature'
+            })
+        }
     }
+    const handleStart = () => {
+        setIndex(Index+1);
+    };
 
     const handleAddBox = () => {
         const differance = Math.abs(EnteredTemperature-CurrentTemperature);
         const state=(differance<=4);
+        setCoins(coins => state ? coins+1 : coins);
         const box={
         boxCurrenTemp:CurrentTemperature,
         boxEnteredTemperature:EnteredTemperature,
@@ -26,6 +37,7 @@ const Game = () => {
         state:state,
     };
     setBoxes([...boxes,box]);
+    SetEnteredTemperature('')
     };
 
     const handleChange = e => {
@@ -33,13 +45,19 @@ const Game = () => {
     };
 
     const handleCityName = value => {
-        setCityName(value)    
+        setCityName(value);
     };
 
     const handleCurrentTemperature = value => {
-setCurrentTemperature(value)
-    }
-    
+        setCurrentTemperature(value);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            HandleComparision();
+        };
+    };
+
     useEffect(()=>{
         handleAddBox();
     },[CityName]);
@@ -47,16 +65,28 @@ setCurrentTemperature(value)
     return (
         <div className='Game'>
             <City getCityName={handleCityName} getCurrentTemperature={handleCurrentTemperature} index={Index}></City>
-            <Input 
-                size="large" 
-                type='number' 
-                placeholder="Please enter the temperature of this city..." 
-                onChange={handleChange} 
-                value={EnteredTemperature}
-            />
-            <Button onClick={HandleComparision} disabled={Index===5}>Submit</Button>
+            {Index===0?
+            <>
+            <Button onClick={handleStart} type="primary">Start The Game</Button>
+            </>:
+            <>
+            {Index<6?<><Input 
+                    size="large" 
+                    type='number' 
+                    placeholder="Please enter the temperature of this city..." 
+                    onChange={handleChange} 
+                    value={EnteredTemperature}
+                    onKeyDown={handleKeyDown}
+                    />
+                    <Button type='primary' size="large" onClick={HandleComparision}>Submit</Button>
+                    </>
+                :<><p style={{textAlign:'center'}}>{coins>=4?'You won the game,congrats:)':'You lost the game,be more careful the next time:)'}</p>
+                <Button type="primary" size='large' onClick={()=>window.location.reload()}>Start again</Button>
+                </>
+            }
+            
             <div className="boxes_container">
-            {boxes.slice(2).map((box, idx)=>{
+            {boxes.slice(3).map((box, idx)=>{
             return <div key={idx} style={{backgroundColor:`${box.state?'green':'red'}`}}>
                 <Title level={5}>{box.boxCityName}</Title>
                 <span>Current Temperatue is {Math.round(box.boxCurrenTemp)}</span>
@@ -64,6 +94,8 @@ setCurrentTemperature(value)
             </div>
             })}
             </div>
+            </>
+            }
             </div>)
 };
 export default Game;

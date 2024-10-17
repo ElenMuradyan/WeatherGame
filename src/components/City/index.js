@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import { capitals } from "../../utilis/constants";
-import { API_KEY, API_URL } from "../../utilis/constants";
+import { capitals } from "../../core/utilis/constants";
+import { API_KEY, API_URL } from "../../core/utilis/constants";
+import Typography from "antd/es/typography/Typography";
+import './index.css';
+const { Title } = Typography;
 
 const City = ({ getCityName, getCurrentTemperature, index }) => {
     const [ RandomCapitals, setRandomCapitals] = useState([]);
@@ -11,7 +14,7 @@ const City = ({ getCityName, getCurrentTemperature, index }) => {
 
     const implementCapitalList = async () => {
         let capitalValues=new Set();
-        while(capitalValues.size<5){
+        while(capitalValues.size<6){
         const index=Math.floor(Math.random()*20);
         capitalValues.add(capitals[index]);
         };
@@ -26,9 +29,7 @@ const City = ({ getCityName, getCurrentTemperature, index }) => {
         temperatures.push(Math.round(temp));
         };
     };
-    
     useEffect(() => {
-        implementCapitalList();
         setRandomCapitals(cities);
         setTemperatures(temperatures);
     }, []);
@@ -47,6 +48,12 @@ const City = ({ getCityName, getCurrentTemperature, index }) => {
             console.error(error);
         }
     };
+    implementCapitalList();
+    return(
+        <>
+        {index===0?<p>Start the game?</p>:<p>{RandomCapitals[index]}</p>}
+        </>
+    )
 };
 
 export default City;
