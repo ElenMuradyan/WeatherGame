@@ -53,4 +53,7 @@
     span{
         display: none;
     }
+    .Game{
+        width:95%;
+    }
 }
