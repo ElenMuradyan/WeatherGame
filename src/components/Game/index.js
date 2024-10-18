@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Input, Button, notification, Typography } from 'antd';
 import City from "../City";
+import Cat from "../Cat";
+import Eyes from "../Eyes";
 import './index.css';
 
 const { Title } = Typography;
@@ -64,6 +66,7 @@ const Game = () => {
 
     return (
         <div className='Game'>
+            {Index===0?<Cat></Cat>:null}
             <City getCityName={handleCityName} getCurrentTemperature={handleCurrentTemperature} index={Index}></City>
             {Index===0?
             <>
@@ -87,13 +90,15 @@ const Game = () => {
             
             <div className="boxes_container">
             {boxes.slice(3).map((box, idx)=>{
-            return <div key={idx} style={{backgroundColor:`${box.state?'green':'red'}`}}>
+            return <div key={idx} style={{background:`${box.state?'linear-gradient(135deg, #6f7bff, #00ffc8)':'linear-gradient(135deg, #ff0000, #ea00ff)'}`}}>
                 <Title level={5}>{box.boxCityName}</Title>
                 <span>Current Temperatue is {Math.round(box.boxCurrenTemp)}</span>
                 <span>You Entered {Math.round(box.boxEnteredTemperature)}</span>
             </div>
             })}
             </div>
+            <Eyes></Eyes>
+            <p style={{fontSize:12}}>Created by MURADYAN</p>
             </>
             }
             </div>)
