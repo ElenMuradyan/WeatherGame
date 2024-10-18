@@ -1,7 +1,7 @@
 import Game from "./components/Game";
 import Typography from "antd/es/typography/Typography";
 import '../src/styles/Global.css';
-const { Title } = Typography
+const { Title } = Typography;
 
 const App = () => {
   return (

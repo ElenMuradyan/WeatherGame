@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Flex, Input, Button, notification, Typography } from 'antd';
+import { Input, Button, notification, Typography } from 'antd';
 import City from "../City";
 import './index.css';
 

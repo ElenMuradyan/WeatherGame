@@ -51,7 +51,9 @@ const City = ({ getCityName, getCurrentTemperature, index }) => {
     implementCapitalList();
     return(
         <>
-        {index===0?<p>Start the game?</p>:<p>{RandomCapitals[index]}</p>}
+        {index===0?
+        <><span>Welcome to "City Temp Challenge," the ultimate game where your knowledge of global cities meets your guessing skills! In this engaging experience, players are presented with stunning visuals of iconic cities from around the world, and your task is simple: guess the current temperature.You must have four right answers to win.</span>
+        <p>Start the game?</p></>:<p>{RandomCapitals[index]}</p>}
         </>
     )
 };
