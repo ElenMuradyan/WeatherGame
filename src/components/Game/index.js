@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Input, Button, notification, Typography } from 'antd';
 import City from "../City";
 import Cat from "../Cat";
-import Eyes from "../Eyes";
 import './index.css';
 
 const { Title } = Typography;
@@ -97,7 +96,7 @@ const Game = () => {
             </div>
             })}
             </div>
-            <Eyes></Eyes>
+            {Index>0?<Cat style={{width:100}}></Cat>:null}
             <p style={{fontSize:12}}>Created by MURADYAN</p>
             </>
             }
