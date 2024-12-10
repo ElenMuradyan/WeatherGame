@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Input, Button, notification, Typography } from 'antd';
 import City from "../City";
 import Cat from "../Cat";
 import './index.css';
+import { maxDiference } from "../../core/utilis/constants";
 
 const { Title } = Typography;
 
 const Game = () => {
-    const [ CurrentTemperature, setCurrentTemperature ] = useState(0);
-    const [ EnteredTemperature, SetEnteredTemperature ] = useState();
-    const [ Index, setIndex ] = useState(0);
-    const [ CityName, setCityName] = useState('');
+    const [ currentTemperature, setCurrentTemperature ] = useState(0);
+    const [ enteredTemperature, SetEnteredTemperature ] = useState();
+    const [ index, setIndex ] = useState(0);
+    const [ cityName, setCityName] = useState('');
     const [ boxes, setBoxes ] = useState([]);
     const [ coins, setCoins ] = useState(0);
     
     const HandleComparision = () => {
-        if(EnteredTemperature!==''){
-            setIndex(Index+1);
+        if(enteredTemperature !== ''){
+            setIndex(index+1);
         }else{
             notification.error({
                 message:'Please enter the temperature'
@@ -24,22 +25,22 @@ const Game = () => {
         }
     }
     const handleStart = () => {
-        setIndex(Index+1);
+        setIndex(index+1);
     };
 
-    const handleAddBox = () => {
-        const differance = Math.abs(EnteredTemperature-CurrentTemperature);
-        const state=(differance<=4);
-        setCoins(coins => state ? coins+1 : coins);
+    const handleAddBox = useCallback(() => {
+        const difference = Math.abs(enteredTemperature-currentTemperature);
+        const state=(difference <= maxDiference);
+        setCoins(coins => state ? coins + 1 : coins);
         const box={
-        boxCurrenTemp:CurrentTemperature,
-        boxEnteredTemperature:EnteredTemperature,
-        boxCityName:CityName,
-        state:state,
+        boxCurrenTemp: currentTemperature,
+        boxEnteredTemperature: enteredTemperature,
+        boxCityName: cityName,
+        state: state,
     };
     setBoxes([...boxes,box]);
     SetEnteredTemperature('')
-    };
+    }, [boxes, cityName, currentTemperature, enteredTemperature]);
 
     const handleChange = e => {
         SetEnteredTemperature(e.target.value);
@@ -61,30 +62,30 @@ const Game = () => {
 
     useEffect(()=>{
         handleAddBox();
-    },[CityName]);
+    },[cityName]);
 
     return (
         <div className='Game'>
-            {Index===0?<Cat></Cat>:null}
-            <City getCityName={handleCityName} getCurrentTemperature={handleCurrentTemperature} index={Index}></City>
-            {Index===0?
+            {index===0 ? <Cat></Cat>:null}
+            <City getCityName={handleCityName} getCurrentTemperature={handleCurrentTemperature} index={index}></City>
+            {index=== 0 ?
             <>
             <Button onClick={handleStart} type="primary">Start The Game</Button>
             </>:
             <>
-            {Index<6?<><Input 
+            {index<6?<><Input 
                     size="large" 
                     type='number' 
                     placeholder="Please enter the temperature of this city..." 
                     onChange={handleChange} 
-                    value={EnteredTemperature}
+                    value={enteredTemperature}
                     onKeyDown={handleKeyDown}
                     />
                     <Button type='primary' size="large" onClick={HandleComparision}>Submit</Button>
                     </>
-                :<><p style={{textAlign:'center'}}>{coins>=4?'You won the game,congrats:)':'You lost the game,be more careful the next time:)'}</p>
+                :<><p style={{textAlign:'center'}}>{coins >= maxDiference ? 'You won the game,congrats:)':'You lost the game,be more careful the next time:)'}</p>
                 <Button type="primary" size='large' onClick={()=>window.location.reload()}>Start again</Button>
-                </>
+                </> 
             }
             
             <div className="boxes_container">
@@ -96,7 +97,7 @@ const Game = () => {
             </div>
             })}
             </div>
-            {Index>0?<Cat style={{width:100}}></Cat>:null}
+            {index>0?<Cat style={{width:100}}></Cat>:null}
             <p style={{fontSize:12}}>Created by MURADYAN</p>
             </>
             }

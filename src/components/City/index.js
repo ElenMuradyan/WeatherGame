@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import { capitals } from "../../core/utilis/constants";
 import { API_KEY, API_URL } from "../../core/utilis/constants";
-import Typography from "antd/es/typography/Typography";
+
 import './index.css';
-import { Color } from "antd/es/color-picker";
 
 const City = ({ getCityName, getCurrentTemperature, index }) => {
-    const [ RandomCapitals, setRandomCapitals] = useState([]);
-    const [ Temperatures, setTemperatures ] = useState([]);
+    const [ randomCapitals, setRandomCapitals] = useState([]);
+    const [ allTemperatures, setAllTemperatures ] = useState([]);
 
-    let temperatures=[];  
+    let temperatures = [];  
     let cities=[];
 
     const implementCapitalList = async () => {
@@ -31,12 +30,12 @@ const City = ({ getCityName, getCurrentTemperature, index }) => {
     };
     useEffect(() => {
         setRandomCapitals(cities);
-        setTemperatures(temperatures);
+        setAllTemperatures(temperatures);
     }, []);
 
     useEffect(()=>{
-    getCurrentTemperature(Temperatures[index-1]);
-    getCityName(RandomCapitals[index-1]);
+    getCurrentTemperature(allTemperatures[index-1]);
+    getCityName(randomCapitals[index-1]);
     },[index])
 
     const fetchTemperature = async (city) => {
@@ -53,7 +52,7 @@ const City = ({ getCityName, getCurrentTemperature, index }) => {
         <>
         {index===0?
         <><p style={{fontSize:15,textAlign:'center'}}>Welcome to "City Temp Challenge," the ultimate game where your knowledge of global cities meets your guessing skills! In this engaging experience, players are presented with stunning visuals of iconic cities from around the world, and your task is simple: guess the current temperature.You must have four right answers to win.</p>
-        <p>Start the game?</p></>:<p>{RandomCapitals[index]}</p>}
+        <p>Start the game?</p></>:<p>{randomCapitals[index]}</p>}
         </>
     )
 };
